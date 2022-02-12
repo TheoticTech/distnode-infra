@@ -13,7 +13,7 @@ variable "do_token" {
 
 variable "main_kubernetes_cluster_version" {
   type    = string
-  default = "1.20.2-do.0"
+  default = "1.21.9-do.0"
 }
 
 variable "main_kubernetes_cluster_node_type" {
