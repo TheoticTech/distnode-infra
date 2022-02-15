@@ -6,7 +6,7 @@ metadata:
   labels:
     app: ${app_name}-auth
 spec:
-  replicas: ${auth_server_k8_deployment_replica_count}
+  replicas: ${auth_server_deployment_replica_count}
   selector:
     matchLabels:
       app: ${app_name}-auth
@@ -17,14 +17,28 @@ spec:
     spec:
       containers:
       - name: ${app_name}-auth
-        image: registry.digitalocean.com/${app_name}/auth:${auth_server_k8_deployment_image_tag}
+        image: registry.digitalocean.com/${app_name}/auth:${auth_server_deployment_image_tag}
         env:
             - name: JWT_ACCESS_TOKEN_SECRET
-              value: ${auth_server_k8_deployment_jwt_access_token_secret}
+              valueFrom:
+                secretKeyRef:
+                  name: auth-server-jwt-access-token-secret
+                  key: value
             - name: JWT_REFRESH_TOKEN_SECRET
-              value: ${auth_server_k8_deployment_jwt_refresh_token_secret}
+              valueFrom:
+                secretKeyRef:
+                  name: auth-server-jwt-refresh-token-secret
+                  key: value
             - name: MONGO_URI
-              value: ${auth_server_mongo_uri}
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-private-uri
+                  key: value
+            - name: MONGO_CA_CERT
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-ca-cert
+                  key: value
         ports:
         - containerPort: 3001
       imagePullSecrets:

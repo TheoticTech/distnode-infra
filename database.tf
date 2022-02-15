@@ -7,6 +7,15 @@ resource "digitalocean_database_cluster" "main_mongodb_cluster" {
   node_count = var.main_mongodb_cluster_node_count
 }
 
+resource "digitalocean_database_firewall" "main_mongodb_cluster_firewall" {
+  cluster_id = digitalocean_database_cluster.main_mongodb_cluster.id
+
+  rule {
+    type  = "k8s"
+    value = digitalocean_kubernetes_cluster.main_kubernetes_cluster.id
+  }
+}
+
 resource "digitalocean_database_db" "main_mongodb_database" {
   cluster_id = digitalocean_database_cluster.main_mongodb_cluster.id
   name       = var.app_name
@@ -14,5 +23,5 @@ resource "digitalocean_database_db" "main_mongodb_database" {
 
 resource "digitalocean_database_db" "user_mongodb_database" {
   cluster_id = digitalocean_database_cluster.main_mongodb_cluster.id
-  name       = "${var.app_name}-users"
+  name       = "users"
 }

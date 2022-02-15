@@ -56,20 +56,20 @@ variable "main_container_registry_subscription_type" {
   default = "basic"
 }
 
-variable "auth_server_k8_deployment_image_tag" {
+variable "auth_server_deployment_image_tag" {
   type    = string
   default = "latest"
 }
 
-variable "auth_server_k8_deployment_replica_count" {
+variable "auth_server_deployment_replica_count" {
   type    = number
   default = 3
 }
 
-variable "auth_server_k8_deployment_jwt_access_token_secret" {
+variable "auth_server_deployment_jwt_access_token_secret" {
   type = string
 }
 
-variable "auth_server_k8_deployment_jwt_refresh_token_secret" {
+variable "auth_server_deployment_jwt_refresh_token_secret" {
   type = string
 }
