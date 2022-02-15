@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ${app_name}-auth-service
+  namespace: ${app_name}
+  labels:
+    app: ${app_name}-auth
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 3001
+  selector:
+    app: ${app_name}-auth

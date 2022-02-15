@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ${app_name}-auth-deployment
+  namespace: ${app_name}
+  labels:
+    app: ${app_name}-auth
+spec:
+  replicas: ${auth_server_k8_deployment_replica_count}
+  selector:
+    matchLabels:
+      app: ${app_name}-auth
+  template:
+    metadata:
+      labels:
+        app: ${app_name}-auth
+    spec:
+      containers:
+      - name: ${app_name}-auth
+        image: registry.digitalocean.com/${app_name}/auth:${auth_server_k8_deployment_image_tag}
+        env:
+            - name: JWT_ACCESS_TOKEN_SECRET
+              value: ${auth_server_k8_deployment_jwt_access_token_secret}
+            - name: JWT_REFRESH_TOKEN_SECRET
+              value: ${auth_server_k8_deployment_jwt_refresh_token_secret}
+            - name: MONGO_URI
+              value: ${auth_server_mongo_uri}
+        ports:
+        - containerPort: 3001
+      imagePullSecrets:
+      - name: docker-cfg
