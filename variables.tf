@@ -3,7 +3,20 @@ variable "app_name" {
   default = "distnode"
 }
 
+variable "deployment_mode" {
+  type = string
+  default = "initialize"
+}
+
 variable "env" {
+  type = string
+}
+
+variable "do_project_name" {
+  type = string
+}
+
+variable "do_tfstate_space_urn" {
   type = string
 }
 
