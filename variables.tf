@@ -4,7 +4,7 @@ variable "app_name" {
 }
 
 variable "deployment_mode" {
-  type = string
+  type    = string
   default = "initialize"
 }
 
