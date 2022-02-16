@@ -28,6 +28,7 @@ do_tfstate_space_urn = "do:space:space-name"
 do_token = "digitalocean-token"
 auth_server_deployment_jwt_access_token_secret = "jwt_access_token_secret"
 auth_server_deployment_jwt_refresh_token_secret = "jwt_refresh_token_secret"
+email_address = "your-email-address" # Used for LetsEncrypt
 EOT
 ```
 8. Import the DO project into Terraform state
@@ -65,3 +66,34 @@ bash scripts/apply.sh $ENV_NAME
 ```sh
 terraform destroy -var-file=./variables/$ENV_NAME.tfvars
 ```
+
+## Important Notes
+The kubernetes_manifest.app_ingress resource depends on the
+helm_release.ingress_nginx resource, which in turn requires HTTPS prior for
+installation. The kubernetes_manifest.lets_encrypt_cluster_issuer  resources
+requires a ClusterIssuer CRD. This is installed with the cert-manager helm
+release. This means that you must have the helm_release.cert_manager installed
+before you can use the LetsEncrypt cluster issuer.
+
+1. Comment out the following resources:
+```
+kubernetes_manifest.app_ingress
+kubernetes_manifest.lets_encrypt_cluster_issuer
+helm_release.ingress_nginx
+```
+2. Run Terraform apply for cert-manager
+3. Uncomment the LetsEncrypt issuer resources:
+```
+kubernetes_manifest.lets_encrypt_cluster_issuer
+```
+4. Run Terraform apply for LetsEncrypt issuer resources
+5. Uncomment the ingress_nginx resource:
+```
+helm_release.ingress_nginx
+```
+6. Run Terraform apply for ingress_nginx resource
+7. Uncomment the app_ingress resource:
+```
+kubernetes_manifest.app_ingress
+```
+8. Run Terraform apply for app_ingress resource

@@ -86,3 +86,7 @@ variable "auth_server_deployment_jwt_access_token_secret" {
 variable "auth_server_deployment_jwt_refresh_token_secret" {
   type = string
 }
+
+variable "email_address" {
+  type = string
+}

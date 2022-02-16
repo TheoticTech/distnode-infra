@@ -1,3 +1,4 @@
+# CLUSTER ####################################################################
 resource "digitalocean_kubernetes_cluster" "main_kubernetes_cluster" {
   name    = "main-kubernetes-cluster-${var.env}"
   region  = var.region
@@ -12,6 +13,7 @@ resource "digitalocean_kubernetes_cluster" "main_kubernetes_cluster" {
   }
 }
 
+# SECRETS ####################################################################
 resource "kubernetes_secret" "main_container_registry_k8_secret" {
   metadata {
     name      = "docker-cfg"
@@ -67,4 +69,105 @@ resource "kubernetes_secret" "main_mongodb_cluster_ca_cert_k8_secret" {
   data = {
     value = data.digitalocean_database_ca.main_mongodb_cluster_ca.certificate
   }
+}
+
+# MANIFESTS ##################################################################
+resource "kubernetes_manifest" "ingress_nginx_namespace" {
+  manifest = yamldecode(
+    templatefile("manifests/ingress_nginx_namespace.yaml", {})
+  )
+}
+
+resource "kubernetes_manifest" "cert_manager_namespace" {
+  manifest = yamldecode(
+    templatefile("manifests/cert_manager_namespace.yaml", {})
+  )
+}
+
+resource "kubernetes_manifest" "app_namespace" {
+  manifest = yamldecode(
+    templatefile(
+      "manifests/app_namespace.yaml",
+      {
+        app_name = var.app_name
+      }
+    )
+  )
+}
+
+resource "kubernetes_manifest" "auth_deployment" {
+  depends_on = [kubernetes_manifest.app_namespace]
+  manifest = yamldecode(
+    templatefile(
+      "manifests/auth_deployment.yaml",
+      {
+        app_name                             = var.app_name,
+        auth_server_deployment_replica_count = var.auth_server_deployment_replica_count,
+        auth_server_deployment_image_tag     = var.auth_server_deployment_image_tag,
+      }
+    )
+  )
+}
+
+resource "kubernetes_manifest" "auth_service" {
+  depends_on = [kubernetes_manifest.app_namespace]
+  manifest = yamldecode(
+    templatefile(
+      "manifests/auth_service.yaml",
+      {
+        app_name = var.app_name
+      }
+    )
+  )
+}
+
+resource "kubernetes_manifest" "app_ingress" {
+  depends_on = [kubernetes_manifest.app_namespace]
+  manifest = yamldecode(
+    templatefile(
+      "manifests/app_ingress.yaml",
+      {
+        app_name = var.app_name
+        domain_prefix = var.env == "production" ? "" : "${var.env}-"
+      }
+    )
+  )
+}
+
+resource "kubernetes_manifest" "lets_encrypt_cluster_issuer" {
+  depends_on = [helm_release.cert_manager]
+  manifest = yamldecode(
+    templatefile(
+      "manifests/lets_encrypt_cluster_issuer.yaml",
+      {
+        email_address = var.email_address
+      }
+    )
+  )
+}
+
+# HELM CHARTS ################################################################
+resource "helm_release" "ingress_nginx" {
+  name  = "ingress-nginx"
+
+  repository = "https://kubernetes.github.io/ingress-nginx"
+  chart = "ingress-nginx"
+  namespace = "ingress-nginx"
+
+  depends_on = [ kubernetes_manifest.ingress_nginx_namespace ]
+}
+
+resource "helm_release" "cert_manager" {
+  name  = "cert-manager"
+
+  repository = "https://charts.jetstack.io"
+  chart = "cert-manager"
+  namespace = "cert-manager"
+  
+  set {
+    name  = "installCRDs"
+    value = "true"
+  }
+
+  depends_on = [ kubernetes_manifest.cert_manager_namespace ]
 }

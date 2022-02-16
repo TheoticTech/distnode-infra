@@ -6,7 +6,7 @@ metadata:
   labels:
     app: ${app_name}-auth
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
   - port: 80
     targetPort: 3001
