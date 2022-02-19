@@ -39,7 +39,9 @@ spec:
                 secretKeyRef:
                   name: mongodb-ca-cert
                   key: value
+            - name: FRONTEND_ORIGIN
+              value: ${frontend_subdomain}${app_name}.com
         ports:
-        - containerPort: 3001
+        - containerPort: 3000
       imagePullSecrets:
       - name: docker-cfg

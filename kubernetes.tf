@@ -104,6 +104,7 @@ resource "kubernetes_manifest" "auth_deployment" {
         app_name                             = var.app_name,
         auth_server_deployment_replica_count = var.auth_server_deployment_replica_count,
         auth_server_deployment_image_tag     = var.auth_server_deployment_image_tag,
+        frontend_subdomain                   = var.env == "production" ? "" : "${var.env}." # No subdomain for production
       }
     )
   )
@@ -130,6 +131,7 @@ resource "kubernetes_manifest" "api_deployment" {
         app_name                             = var.app_name,
         api_server_deployment_replica_count = var.api_server_deployment_replica_count,
         api_server_deployment_image_tag     = var.api_server_deployment_image_tag,
+        frontend_subdomain                   = var.env == "production" ? "" : "${var.env}." # No subdomain for production
       }
     )
   )
@@ -147,6 +149,33 @@ resource "kubernetes_manifest" "api_service" {
   )
 }
 
+resource "kubernetes_manifest" "frontend_deployment" {
+  depends_on = [kubernetes_manifest.app_namespace]
+  manifest = yamldecode(
+    templatefile(
+      "manifests/frontend_deployment.yaml",
+      {
+        app_name                             = var.app_name,
+        domain_prefix = var.env == "production" ? "" : "${var.env}-"
+        frontend_server_deployment_replica_count = var.api_server_deployment_replica_count,
+        frontend_server_deployment_image_tag     = var.api_server_deployment_image_tag,
+      }
+    )
+  )
+}
+
+resource "kubernetes_manifest" "frontend_service" {
+  depends_on = [kubernetes_manifest.app_namespace]
+  manifest = yamldecode(
+    templatefile(
+      "manifests/frontend_service.yaml",
+      {
+        app_name = var.app_name
+      }
+    )
+  )
+}
+
 resource "kubernetes_manifest" "app_ingress" {
   depends_on = [kubernetes_manifest.app_namespace]
   manifest = yamldecode(
@@ -155,6 +184,7 @@ resource "kubernetes_manifest" "app_ingress" {
       {
         app_name = var.app_name
         domain_prefix = var.env == "production" ? "" : "${var.env}-"
+        frontend_subdomain = var.env == "production" ? "" : "${var.env}." # No subdomain for production
       }
     )
   )

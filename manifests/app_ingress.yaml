@@ -11,10 +11,21 @@ metadata:
 spec:
   tls:
   - hosts:
-    - ${domain_prefix}auth.${app_name}.com
     - ${domain_prefix}api.${app_name}.com
+    - ${domain_prefix}auth.${app_name}.com
+    - ${frontend_subdomain}${app_name}.com # frontend
     secretName: ${app_name}-tls
   rules:
+  - host: "${domain_prefix}api.${app_name}.com"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: ${app_name}-api-service
+            port:
+              number: 80
   - host: "${domain_prefix}auth.${app_name}.com"
     http:
       paths:
@@ -25,13 +36,13 @@ spec:
             name: ${app_name}-auth-service
             port:
               number: 80
-  - host: "${domain_prefix}api.${app_name}.com"
+  - host: "${frontend_subdomain}${app_name}.com"
     http:
       paths:
       - pathType: Prefix
         path: "/"
         backend:
           service:
-            name: ${app_name}-api-service
+            name: ${app_name}-frontend-service
             port:
               number: 80

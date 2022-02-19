@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ${app_name}-frontend-deployment
+  namespace: ${app_name}
+  labels:
+    app: ${app_name}
+spec:
+  replicas: ${frontend_server_deployment_replica_count}
+  selector:
+    matchLabels:
+      app: ${app_name}
+  template:
+    metadata:
+      labels:
+        app: ${app_name}
+    spec:
+      containers:
+      - name: ${app_name}-frontend
+        image: registry.digitalocean.com/${app_name}/frontend:${frontend_server_deployment_image_tag}
+        env:
+        - name: API_URL
+          value: ${domain_prefix}api.${app_name}.com
+        - name: AUTH_URL
+          value: ${domain_prefix}auth.${app_name}.com
+        ports:
+        - containerPort: 3002
+      imagePullSecrets:
+      - name: docker-cfg
