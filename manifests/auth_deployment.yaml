@@ -39,6 +39,8 @@ spec:
                 secretKeyRef:
                   name: mongodb-ca-cert
                   key: value
+            - name: DOMAIN_NAME
+              value: ${app_name}.com
             - name: FRONTEND_ORIGIN
               value: ${frontend_subdomain}${app_name}.com
         ports:
