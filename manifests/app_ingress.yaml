@@ -1,10 +1,10 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ${app_name}-auth-ingress
+  name: ${app_name}-ingress
   namespace: ${app_name}
   labels:
-    app: ${app_name}-auth
+    app: ${app_name}
   annotations:
     kubernetes.io/ingress.class: nginx
     cert-manager.io/cluster-issuer: letsencrypt
@@ -12,6 +12,7 @@ spec:
   tls:
   - hosts:
     - ${domain_prefix}auth.${app_name}.com
+    - ${domain_prefix}api.${app_name}.com
     secretName: ${app_name}-tls
   rules:
   - host: "${domain_prefix}auth.${app_name}.com"
@@ -22,5 +23,15 @@ spec:
         backend:
           service:
             name: ${app_name}-auth-service
+            port:
+              number: 80
+  - host: "${domain_prefix}api.${app_name}.com"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: ${app_name}-api-service
             port:
               number: 80

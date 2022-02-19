@@ -1,12 +1,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ${app_name}-auth-deployment
+  name: ${app_name}-api-deployment
   namespace: ${app_name}
   labels:
     app: ${app_name}
 spec:
-  replicas: ${auth_server_deployment_replica_count}
+  replicas: ${api_server_deployment_replica_count}
   selector:
     matchLabels:
       app: ${app_name}
@@ -16,18 +16,13 @@ spec:
         app: ${app_name}
     spec:
       containers:
-      - name: ${app_name}-auth
-        image: registry.digitalocean.com/${app_name}/auth:${auth_server_deployment_image_tag}
+      - name: ${app_name}-api
+        image: registry.digitalocean.com/${app_name}/api:${api_server_deployment_image_tag}
         env:
             - name: JWT_ACCESS_TOKEN_SECRET
               valueFrom:
                 secretKeyRef:
                   name: auth-server-jwt-access-token-secret
-                  key: value
-            - name: JWT_REFRESH_TOKEN_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: auth-server-jwt-refresh-token-secret
                   key: value
             - name: MONGO_URI
               valueFrom:
@@ -40,6 +35,6 @@ spec:
                   name: mongodb-ca-cert
                   key: value
         ports:
-        - containerPort: 3001
+        - containerPort: 3000
       imagePullSecrets:
       - name: docker-cfg

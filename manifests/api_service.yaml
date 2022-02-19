@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: ${app_name}-auth-service
+  name: ${app_name}-api-service
   namespace: ${app_name}
   labels:
     app: ${app_name}
@@ -9,6 +9,6 @@ spec:
   type: ClusterIP
   ports:
   - port: 80
-    targetPort: 3001
+    targetPort: 3000
   selector:
     app: ${app_name}

@@ -121,6 +121,32 @@ resource "kubernetes_manifest" "auth_service" {
   )
 }
 
+resource "kubernetes_manifest" "api_deployment" {
+  depends_on = [kubernetes_manifest.app_namespace]
+  manifest = yamldecode(
+    templatefile(
+      "manifests/api_deployment.yaml",
+      {
+        app_name                             = var.app_name,
+        api_server_deployment_replica_count = var.api_server_deployment_replica_count,
+        api_server_deployment_image_tag     = var.api_server_deployment_image_tag,
+      }
+    )
+  )
+}
+
+resource "kubernetes_manifest" "api_service" {
+  depends_on = [kubernetes_manifest.app_namespace]
+  manifest = yamldecode(
+    templatefile(
+      "manifests/api_service.yaml",
+      {
+        app_name = var.app_name
+      }
+    )
+  )
+}
+
 resource "kubernetes_manifest" "app_ingress" {
   depends_on = [kubernetes_manifest.app_namespace]
   manifest = yamldecode(

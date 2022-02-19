@@ -87,6 +87,16 @@ variable "auth_server_deployment_jwt_refresh_token_secret" {
   type = string
 }
 
+variable "api_server_deployment_image_tag" {
+  type    = string
+  default = "latest"
+}
+
+variable "api_server_deployment_replica_count" {
+  type    = number
+  default = 3
+}
+
 variable "email_address" {
   type = string
 }
