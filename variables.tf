@@ -76,7 +76,7 @@ variable "auth_server_deployment_image_tag" {
 
 variable "auth_server_deployment_replica_count" {
   type    = number
-  default = 2
+  default = 1
 }
 
 variable "auth_server_deployment_jwt_access_token_secret" {
@@ -94,7 +94,7 @@ variable "api_server_deployment_image_tag" {
 
 variable "api_server_deployment_replica_count" {
   type    = number
-  default = 2
+  default = 1
 }
 
 variable "frontend_server_deployment_image_tag" {
@@ -104,7 +104,7 @@ variable "frontend_server_deployment_image_tag" {
 
 variable "frontend_server_deployment_replica_count" {
   type    = number
-  default = 2
+  default = 1
 }
 
 variable "email_address" {

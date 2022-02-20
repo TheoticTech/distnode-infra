@@ -156,7 +156,6 @@ resource "kubernetes_manifest" "frontend_deployment" {
       "manifests/frontend_deployment.yaml",
       {
         app_name                             = var.app_name,
-        domain_prefix = var.env == "production" ? "" : "${var.env}-"
         frontend_server_deployment_replica_count = var.api_server_deployment_replica_count,
         frontend_server_deployment_image_tag     = var.api_server_deployment_image_tag,
       }

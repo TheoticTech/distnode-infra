@@ -18,12 +18,7 @@ spec:
       containers:
       - name: ${app_name}-frontend
         image: registry.digitalocean.com/${app_name}/frontend:${frontend_server_deployment_image_tag}
-        env:
-        - name: API_URL
-          value: ${domain_prefix}api.${app_name}.com
-        - name: AUTH_URL
-          value: ${domain_prefix}auth.${app_name}.com
         ports:
-        - containerPort: 3002
+        - containerPort: 80
       imagePullSecrets:
       - name: docker-cfg

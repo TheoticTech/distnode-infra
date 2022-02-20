@@ -42,7 +42,7 @@ spec:
             - name: DOMAIN_NAME
               value: ${app_name}.com
             - name: FRONTEND_ORIGIN
-              value: ${frontend_subdomain}${app_name}.com
+              value: https://${frontend_subdomain}${app_name}.com
         ports:
         - containerPort: 3000
       imagePullSecrets:
