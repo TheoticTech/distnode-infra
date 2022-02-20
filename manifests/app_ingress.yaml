@@ -26,7 +26,7 @@ spec:
           service:
             name: ${app_name}-api-service
             port:
-              number: 3001
+              number: 80
   - host: "${domain_prefix}auth.${app_name}.com"
     http:
       paths:
@@ -36,7 +36,7 @@ spec:
           service:
             name: ${app_name}-auth-service
             port:
-              number: 3000
+              number: 80
   - host: "${frontend_subdomain}${app_name}.com"
     http:
       paths:
