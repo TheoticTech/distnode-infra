@@ -71,6 +71,39 @@ resource "kubernetes_secret" "main_mongodb_cluster_ca_cert_k8_secret" {
   }
 }
 
+resource "kubernetes_secret" "main_neo4j_username_k8_secret" {
+  metadata {
+    name      = "neo4j-username"
+    namespace = var.app_name
+  }
+
+  data = {
+    value = var.neo4j_username
+  }
+}
+
+resource "kubernetes_secret" "main_neo4j_password_k8_secret" {
+  metadata {
+    name      = "neo4j-password"
+    namespace = var.app_name
+  }
+
+  data = {
+    value = var.neo4j_password
+  }
+}
+
+resource "kubernetes_secret" "main_neo4j_uri_k8_secret" {
+  metadata {
+    name      = "neo4j-uri"
+    namespace = var.app_name
+  }
+
+  data = {
+    value = var.neo4j_uri
+  }
+}
+
 # MANIFESTS ##################################################################
 resource "kubernetes_manifest" "ingress_nginx_namespace" {
   manifest = yamldecode(

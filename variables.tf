@@ -87,6 +87,18 @@ variable "auth_server_deployment_jwt_refresh_token_secret" {
   type = string
 }
 
+variable "neo4j_username" {
+  type = string
+}
+
+variable "neo4j_password" {
+  type = string
+}
+
+variable "neo4j_uri" {
+  type = string
+}
+
 variable "api_server_deployment_image_tag" {
   type    = string
   default = "latest"

@@ -39,6 +39,21 @@ spec:
                 secretKeyRef:
                   name: mongodb-ca-cert
                   key: value
+            - name: NEO4J_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: neo4j-username
+                  key: value
+            - name: NEO4J_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: neo4j-password
+                  key: value
+            - name: NEO4J_URI
+              valueFrom:
+                secretKeyRef:
+                  name: neo4j-uri
+                  key: value
             - name: DOMAIN_NAME
               value: ${app_name}.com
             - name: FRONTEND_ORIGIN
