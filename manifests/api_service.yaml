@@ -4,11 +4,11 @@ metadata:
   name: ${app_name}-api-service
   namespace: ${app_name}
   labels:
-    app: ${app_name}
+    app: ${app_name}-api
 spec:
   type: ClusterIP
   ports:
   - port: 3001
     targetPort: 3001
   selector:
-    app: ${app_name}
+    app: ${app_name}-api

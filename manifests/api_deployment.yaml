@@ -4,16 +4,16 @@ metadata:
   name: ${app_name}-api-deployment
   namespace: ${app_name}
   labels:
-    app: ${app_name}
+    app: ${app_name}-api
 spec:
   replicas: ${api_server_deployment_replica_count}
   selector:
     matchLabels:
-      app: ${app_name}
+      app: ${app_name}-api
   template:
     metadata:
       labels:
-        app: ${app_name}
+        app: ${app_name}-api
     spec:
       containers:
       - name: ${app_name}-api

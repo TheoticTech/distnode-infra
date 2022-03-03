@@ -4,16 +4,16 @@ metadata:
   name: ${app_name}-frontend-deployment
   namespace: ${app_name}
   labels:
-    app: ${app_name}
+    app: ${app_name}-frontend
 spec:
   replicas: ${frontend_server_deployment_replica_count}
   selector:
     matchLabels:
-      app: ${app_name}
+      app: ${app_name}-frontend
   template:
     metadata:
       labels:
-        app: ${app_name}
+        app: ${app_name}-frontend
     spec:
       containers:
       - name: ${app_name}-frontend

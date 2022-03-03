@@ -4,16 +4,16 @@ metadata:
   name: ${app_name}-auth-deployment
   namespace: ${app_name}
   labels:
-    app: ${app_name}
+    app: ${app_name}-auth
 spec:
   replicas: ${auth_server_deployment_replica_count}
   selector:
     matchLabels:
-      app: ${app_name}
+      app: ${app_name}-auth
   template:
     metadata:
       labels:
-        app: ${app_name}
+        app: ${app_name}-auth
     spec:
       containers:
       - name: ${app_name}-auth
