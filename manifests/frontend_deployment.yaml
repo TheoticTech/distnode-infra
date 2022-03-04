@@ -20,5 +20,11 @@ spec:
         image: registry.digitalocean.com/${app_name}/frontend:${frontend_server_deployment_image_tag}
         ports:
         - containerPort: 80
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 3
       imagePullSecrets:
       - name: docker-cfg
