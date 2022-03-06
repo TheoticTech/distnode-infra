@@ -26,6 +26,7 @@ env = "$ENV_NAME"
 do_project_name = "Digital Ocean Project Name"
 do_tfstate_space_urn = "do:space:space-name"
 do_token = "digitalocean-token"
+auth_server_deployment_csrf_token_secret = "csrf_token_secret"
 auth_server_deployment_jwt_access_token_secret = "jwt_access_token_secret"
 auth_server_deployment_jwt_refresh_token_secret = "jwt_refresh_token_secret"
 email_address = "your-email-address" # Used for LetsEncrypt

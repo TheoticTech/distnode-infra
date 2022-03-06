@@ -27,6 +27,17 @@ resource "kubernetes_secret" "main_container_registry_k8_secret" {
   type = "kubernetes.io/dockerconfigjson"
 }
 
+resource "kubernetes_secret" "auth_server_deployment_csrf_token_secret_k8_secret" {
+  metadata {
+    name      = "auth-server-csrf-token-secret"
+    namespace = var.app_name
+  }
+
+  data = {
+    value = var.auth_server_deployment_csrf_token_secret
+  }
+}
+
 resource "kubernetes_secret" "auth_server_deployment_jwt_access_token_secret_k8_secret" {
   metadata {
     name      = "auth-server-jwt-access-token-secret"
@@ -161,10 +172,10 @@ resource "kubernetes_manifest" "api_deployment" {
     templatefile(
       "manifests/api_deployment.yaml",
       {
-        app_name                             = var.app_name,
+        app_name                            = var.app_name,
         api_server_deployment_replica_count = var.api_server_deployment_replica_count,
         api_server_deployment_image_tag     = var.api_server_deployment_image_tag,
-        frontend_subdomain                   = var.env == "production" ? "" : "${var.env}." # No subdomain for production
+        frontend_subdomain                  = var.env == "production" ? "" : "${var.env}." # No subdomain for production
       }
     )
   )
@@ -188,7 +199,7 @@ resource "kubernetes_manifest" "frontend_deployment" {
     templatefile(
       "manifests/frontend_deployment.yaml",
       {
-        app_name                             = var.app_name,
+        app_name                                 = var.app_name,
         frontend_server_deployment_replica_count = var.api_server_deployment_replica_count,
         frontend_server_deployment_image_tag     = var.api_server_deployment_image_tag,
       }
@@ -214,8 +225,8 @@ resource "kubernetes_manifest" "app_ingress" {
     templatefile(
       "manifests/app_ingress.yaml",
       {
-        app_name = var.app_name
-        domain_prefix = var.env == "production" ? "" : "${var.env}-"
+        app_name           = var.app_name
+        domain_prefix      = var.env == "production" ? "" : "${var.env}-"
         frontend_subdomain = var.env == "production" ? "" : "${var.env}." # No subdomain for production
       }
     )
@@ -236,26 +247,26 @@ resource "kubernetes_manifest" "lets_encrypt_cluster_issuer" {
 
 # HELM CHARTS ################################################################
 resource "helm_release" "ingress_nginx" {
-  name  = "ingress-nginx"
+  name = "ingress-nginx"
 
   repository = "https://kubernetes.github.io/ingress-nginx"
-  chart = "ingress-nginx"
-  namespace = "ingress-nginx"
+  chart      = "ingress-nginx"
+  namespace  = "ingress-nginx"
 
-  depends_on = [ kubernetes_manifest.ingress_nginx_namespace ]
+  depends_on = [kubernetes_manifest.ingress_nginx_namespace]
 }
 
 resource "helm_release" "cert_manager" {
-  name  = "cert-manager"
+  name = "cert-manager"
 
   repository = "https://charts.jetstack.io"
-  chart = "cert-manager"
-  namespace = "cert-manager"
-  
+  chart      = "cert-manager"
+  namespace  = "cert-manager"
+
   set {
     name  = "installCRDs"
     value = "true"
   }
 
-  depends_on = [ kubernetes_manifest.cert_manager_namespace ]
+  depends_on = [kubernetes_manifest.cert_manager_namespace]
 }

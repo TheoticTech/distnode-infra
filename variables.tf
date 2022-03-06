@@ -79,6 +79,10 @@ variable "auth_server_deployment_replica_count" {
   default = 1
 }
 
+variable "auth_server_deployment_csrf_token_secret" {
+  type = string
+}
+
 variable "auth_server_deployment_jwt_access_token_secret" {
   type = string
 }

@@ -19,6 +19,11 @@ spec:
       - name: ${app_name}-auth
         image: registry.digitalocean.com/${app_name}/auth:${auth_server_deployment_image_tag}
         env:
+            - name: CSRF_TOKEN_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: auth-server-csrf-token-secret
+                  key: value
             - name: JWT_ACCESS_TOKEN_SECRET
               valueFrom:
                 secretKeyRef:
