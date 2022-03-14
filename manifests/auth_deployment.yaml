@@ -34,6 +34,11 @@ spec:
                 secretKeyRef:
                   name: auth-server-jwt-refresh-token-secret
                   key: value
+            - name: SENDGRID_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: auth-server-sendgrid-api-key
+                  key: value
             - name: MONGO_URI
               valueFrom:
                 secretKeyRef:

@@ -91,6 +91,10 @@ variable "auth_server_deployment_jwt_refresh_token_secret" {
   type = string
 }
 
+variable "auth_server_deployment_sendgrid_api_key" {
+  type = string
+}
+
 variable "neo4j_username" {
   type = string
 }

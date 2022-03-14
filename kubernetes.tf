@@ -60,6 +60,17 @@ resource "kubernetes_secret" "auth_server_deployment_jwt_refresh_token_secret_k8
   }
 }
 
+resource "kubernetes_secret" "auth_server_deployment_sendgrid_api_key_k8_secret" {
+  metadata {
+    name      = "auth-server-sendgrid-api-key"
+    namespace = var.app_name
+  }
+
+  data = {
+    value = var.auth_server_deployment_sendgrid_api_key
+  }
+}
+
 resource "kubernetes_secret" "main_mongodb_cluster_private_uri_k8_secret" {
   metadata {
     name      = "mongodb-private-uri"
