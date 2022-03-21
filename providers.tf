@@ -9,6 +9,8 @@ terraform {
 
 provider "digitalocean" {
   token = var.do_token
+  spaces_access_id  = var.access_key
+  spaces_secret_key = var.secret_key
 }
 
 provider "kubernetes" {

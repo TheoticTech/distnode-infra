@@ -29,6 +29,14 @@ variable "do_token" {
   type = string
 }
 
+variable "access_key" {
+  type = string
+}
+
+variable "secret_key" {
+  type = string
+}
+
 variable "main_kubernetes_cluster_version" {
   type    = string
   default = "1.21.9-do.0"
