@@ -126,6 +126,50 @@ resource "kubernetes_secret" "main_neo4j_uri_k8_secret" {
   }
 }
 
+resource "kubernetes_secret" "do_space_endpoint_k8_secret" {
+  metadata {
+    name      = "do-space-endpoint"
+    namespace = var.app_name
+  }
+
+  data = {
+    value = var.do_static_space_endpoint
+  }
+}
+
+resource "kubernetes_secret" "do_space_bucket_k8_secret" {
+  metadata {
+    name      = "do-space-bucket"
+    namespace = var.app_name
+  }
+
+  data = {
+    value = var.do_static_space_bucket
+  }
+}
+
+resource "kubernetes_secret" "do_space_bucket_access_key_k8_secret" {
+  metadata {
+    name      = "do-space-bucket-access-key"
+    namespace = var.app_name
+  }
+
+  data = {
+    value = var.access_key
+  }
+}
+
+resource "kubernetes_secret" "do_space_bucket_secret_key_k8_secret" {
+  metadata {
+    name      = "do-space-bucket-secret-key"
+    namespace = var.app_name
+  }
+
+  data = {
+    value = var.secret_key
+  }
+}
+
 # MANIFESTS ##################################################################
 resource "kubernetes_manifest" "ingress_nginx_namespace" {
   manifest = yamldecode(

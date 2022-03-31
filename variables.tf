@@ -37,6 +37,15 @@ variable "secret_key" {
   type = string
 }
 
+variable "do_static_space_endpoint" {
+  type    = string
+  default = "sfo3.digitaloceanspaces.com"
+}
+
+variable "do_static_space_bucket" {
+  type    = string
+}
+
 variable "main_kubernetes_cluster_version" {
   type    = string
   default = "1.21.9-do.0"

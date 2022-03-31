@@ -54,6 +54,26 @@ spec:
                 secretKeyRef:
                   name: neo4j-uri
                   key: value
+            - name: DO_SPACE_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: do-space-endpoint
+                  key: value
+            - name: DO_SPACE_BUCKET
+              valueFrom:
+                secretKeyRef:
+                  name: do-space-bucket
+                  key: value
+            - name: DO_SPACE_BUCKET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: do-space-bucket-access-key
+                  key: value
+            - name: DO_SPACE_BUCKET_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: do-space-bucket-secret-key
+                  key: value
             - name: FRONTEND_ORIGIN
               value: https://${frontend_subdomain}${app_name}.com
         ports:
