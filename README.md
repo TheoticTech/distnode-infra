@@ -26,6 +26,8 @@ env = "$ENV_NAME"
 do_project_name = "Digital Ocean Project Name"
 do_tfstate_space_urn = "do:space:space-name"
 do_token = "digitalocean-token"
+# Token secrets can be generated using the following:
+# node -e "console.log(require('crypto').randomBytes(256).toString('base64'));"
 auth_server_deployment_csrf_token_secret = "csrf_token_secret"
 auth_server_deployment_jwt_access_token_secret = "jwt_access_token_secret"
 auth_server_deployment_jwt_refresh_token_secret = "jwt_refresh_token_secret"
@@ -50,6 +52,7 @@ sed -i '' "s/initialize/deploy/g" variables/$ENV_NAME.tfvars
 ```
 
 ## Resource Deployment
+**NOTE**: If errors are encountered, please read the "Important Notes" section below.
 
 ### Terraform Plan
 ```sh
@@ -76,25 +79,32 @@ requires a ClusterIssuer CRD. This is installed with the cert-manager helm
 release. This means that you must have the helm_release.cert_manager installed
 before you can use the LetsEncrypt cluster issuer.
 
-1. Comment out the following resources:
+1. Ensure Helm is installed and cert-manager repo is added
+```sh
+brew install helm
+helm repo add jetstack https://charts.jetstack.io
+helm repo update
+```
+
+2. Comment out the following resources:
 ```
 kubernetes_manifest.app_ingress
 kubernetes_manifest.lets_encrypt_cluster_issuer
 helm_release.ingress_nginx
 ```
-2. Run Terraform apply for cert-manager
-3. Uncomment the LetsEncrypt issuer resources:
+3. Run Terraform apply for cert-manager
+4. Uncomment the LetsEncrypt issuer resources:
 ```
 kubernetes_manifest.lets_encrypt_cluster_issuer
 ```
-4. Run Terraform apply for LetsEncrypt issuer resources
-5. Uncomment the ingress_nginx resource:
+5. Run Terraform apply for LetsEncrypt issuer resources
+6. Uncomment the ingress_nginx resource:
 ```
 helm_release.ingress_nginx
 ```
-6. Run Terraform apply for ingress_nginx resource
-7. Uncomment the app_ingress resource:
+7. Run Terraform apply for ingress_nginx resource
+8. Uncomment the app_ingress resource:
 ```
 kubernetes_manifest.app_ingress
 ```
-8. Run Terraform apply for app_ingress resource
+9. Run Terraform apply for app_ingress resource

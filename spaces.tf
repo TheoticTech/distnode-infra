@@ -1,5 +1,5 @@
 resource "digitalocean_spaces_bucket" "static" {
-  name   = var.env == "production" ? "${var.app_name}-static" : "${var.app_name}-static-${var.env}"
+  name   = var.env == "prod" ? "${var.app_name}-static" : "${var.app_name}-static-${var.env}"
   region = var.region
 
   acl = "public-read"

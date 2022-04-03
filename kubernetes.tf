@@ -203,7 +203,7 @@ resource "kubernetes_manifest" "auth_deployment" {
         app_name                             = var.app_name,
         auth_server_deployment_replica_count = var.auth_server_deployment_replica_count,
         auth_server_deployment_image_tag     = var.auth_server_deployment_image_tag,
-        frontend_subdomain                   = var.env == "production" ? "" : "${var.env}." # No subdomain for production
+        frontend_subdomain                   = var.env == "prod" ? "" : "${var.env}." # No subdomain for prod
       }
     )
   )
@@ -230,7 +230,7 @@ resource "kubernetes_manifest" "api_deployment" {
         app_name                            = var.app_name,
         api_server_deployment_replica_count = var.api_server_deployment_replica_count,
         api_server_deployment_image_tag     = var.api_server_deployment_image_tag,
-        frontend_subdomain                  = var.env == "production" ? "" : "${var.env}." # No subdomain for production
+        frontend_subdomain                  = var.env == "prod" ? "" : "${var.env}." # No subdomain for prod
       }
     )
   )
@@ -281,8 +281,8 @@ resource "kubernetes_manifest" "app_ingress" {
       "manifests/app_ingress.yaml",
       {
         app_name           = var.app_name
-        domain_prefix      = var.env == "production" ? "" : "${var.env}-"
-        frontend_subdomain = var.env == "production" ? "" : "${var.env}." # No subdomain for production
+        domain_prefix      = var.env == "prod" ? "" : "${var.env}-"
+        frontend_subdomain = var.env == "prod" ? "" : "${var.env}." # No subdomain for prod
       }
     )
   )
@@ -317,6 +317,7 @@ resource "helm_release" "cert_manager" {
   repository = "https://charts.jetstack.io"
   chart      = "cert-manager"
   namespace  = "cert-manager"
+  version    = var.cert_manager_version
 
   set {
     name  = "installCRDs"

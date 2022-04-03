@@ -9,4 +9,5 @@ else
     exit 1
 fi
 
+export KUBE_CONFIG_PATH=~/.kube/config
 terraform init -reconfigure -backend-config=./backends/$1.tfbackend

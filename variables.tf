@@ -46,6 +46,12 @@ variable "do_static_space_bucket" {
   type    = string
 }
 
+# From https://artifacthub.io/packages/helm/cert-manager/cert-manager
+variable "cert_manager_version" {
+  type    = string
+  default = "v1.7.1"
+}
+
 variable "main_kubernetes_cluster_version" {
   type    = string
   default = "1.21.9-do.0"
@@ -63,7 +69,7 @@ variable "main_kubernetes_cluster_min_nodes" {
 
 variable "main_kubernetes_cluster_max_nodes" {
   type    = number
-  default = 3
+  default = 2
 }
 
 variable "main_mongodb_cluster_version" {
