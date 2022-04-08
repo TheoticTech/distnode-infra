@@ -256,7 +256,7 @@ resource "kubernetes_manifest" "frontend_deployment" {
       {
         app_name                                 = var.app_name,
         frontend_server_deployment_replica_count = var.api_server_deployment_replica_count,
-        frontend_server_deployment_image_tag     = var.api_server_deployment_image_tag,
+        frontend_server_deployment_image_tag     = var.frontend_server_deployment_image_tag,
       }
     )
   )
