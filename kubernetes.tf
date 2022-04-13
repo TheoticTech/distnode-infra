@@ -255,7 +255,7 @@ resource "kubernetes_manifest" "frontend_deployment" {
       "manifests/frontend_deployment.yaml",
       {
         app_name                                 = var.app_name,
-        frontend_server_deployment_replica_count = var.api_server_deployment_replica_count,
+        frontend_server_deployment_replica_count = var.frontend_server_deployment_replica_count,
         frontend_server_deployment_image_tag     = var.frontend_server_deployment_image_tag,
       }
     )
@@ -267,6 +267,32 @@ resource "kubernetes_manifest" "frontend_service" {
   manifest = yamldecode(
     templatefile(
       "manifests/frontend_service.yaml",
+      {
+        app_name = var.app_name
+      }
+    )
+  )
+}
+
+resource "kubernetes_manifest" "prerender_deployment" {
+  depends_on = [kubernetes_manifest.app_namespace]
+  manifest = yamldecode(
+    templatefile(
+      "manifests/prerender_deployment.yaml",
+      {
+        app_name                                  = var.app_name,
+        prerender_server_deployment_replica_count = var.prerender_server_deployment_replica_count,
+        prerender_server_deployment_image_tag     = var.prerender_server_deployment_image_tag,
+      }
+    )
+  )
+}
+
+resource "kubernetes_manifest" "prerender_service" {
+  depends_on = [kubernetes_manifest.app_namespace]
+  manifest = yamldecode(
+    templatefile(
+      "manifests/prerender_service.yaml",
       {
         app_name = var.app_name
       }

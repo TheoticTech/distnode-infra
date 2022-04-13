@@ -150,6 +150,16 @@ variable "frontend_server_deployment_replica_count" {
   default = 1
 }
 
+variable "prerender_server_deployment_image_tag" {
+  type    = string
+  default = "latest"
+}
+
+variable "prerender_server_deployment_replica_count" {
+  type    = number
+  default = 1
+}
+
 variable "email_address" {
   type = string
 }

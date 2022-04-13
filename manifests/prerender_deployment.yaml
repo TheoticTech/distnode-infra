@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ${app_name}-prerender-deployment
+  namespace: ${app_name}
+  labels:
+    app: ${app_name}-prerender
+spec:
+  replicas: ${prerender_server_deployment_replica_count}
+  selector:
+    matchLabels:
+      app: ${app_name}-prerender
+  template:
+    metadata:
+      labels:
+        app: ${app_name}-prerender
+    spec:
+      containers:
+      - name: ${app_name}-prerender
+        image: registry.digitalocean.com/${app_name}/prerender:${prerender_server_deployment_image_tag}
+        ports:
+        - containerPort: 3003
+      imagePullSecrets:
+      - name: docker-cfg
