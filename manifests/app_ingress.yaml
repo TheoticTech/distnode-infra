@@ -14,7 +14,8 @@ spec:
   - hosts:
     - ${domain_prefix}api.${app_name}.com
     - ${domain_prefix}auth.${app_name}.com
-    - ${frontend_subdomain}${app_name}.com # frontend
+    - ${frontend_subdomain}${app_name}.com
+    - www.${frontend_subdomain}${app_name}.com
     secretName: ${app_name}-tls
   rules:
   - host: "${domain_prefix}api.${app_name}.com"
@@ -38,6 +39,16 @@ spec:
             port:
               number: 3000
   - host: "${frontend_subdomain}${app_name}.com"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: ${app_name}-frontend-service
+            port:
+              number: 80
+  - host: "www.${frontend_subdomain}${app_name}.com"
     http:
       paths:
       - pathType: Prefix
