@@ -78,6 +78,8 @@ spec:
               value: https://${frontend_subdomain}${app_name}.com
             - name: FRONTEND_ORIGIN_WWW
               value: https://www.${frontend_subdomain}${app_name}.com
+            - name: PRERENDER_SERVER
+              value: distnode-prerender-service.distnode.svc.cluster.local:3003
         ports:
         - containerPort: 3001
         livenessProbe:
