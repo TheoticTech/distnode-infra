@@ -1,3 +1,5 @@
+![DistNode Screenshot](./dn-screenshot.png)
+
 # Getting Started
 
 ## Project Setup
