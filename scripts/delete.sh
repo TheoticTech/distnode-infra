@@ -2,7 +2,7 @@
 
 environments=("dev test prod")
 if [[ " ${environments[*]} " =~ " $1 " ]]; then
-    echo "Running apply against $1 environment"
+    echo "Running destroy against $1 environment"
 else
     echo "Invalid environment '$1' passed"
     echo "Must be one of: [${environments[*]}]"
@@ -10,4 +10,4 @@ else
 fi
 
 source ./scripts/switchenv.sh $1
-terraform apply -var-file="./variables/$1.tfvars"
+terraform destroy -var-file="./variables/$1.tfvars"
